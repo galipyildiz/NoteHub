@@ -53,6 +53,18 @@ namespace NoteHub.API
                     };
                 });
 
+        //https://docs.microsoft.com/en-us/aspnet/core/security/cors?view=aspnetcore-5.0#cors-with-default-policy-and-middleware
+            services.AddCors(options =>
+            {
+                options.AddDefaultPolicy(
+                    builder =>
+                    {
+                        builder.WithOrigins("*")//her siteye izin ver
+                        .AllowAnyHeader()//her headera izin ver
+                        .AllowAnyMethod();//her methoda izin ver
+                    });
+            });//cors policiy
+
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
@@ -73,6 +85,7 @@ namespace NoteHub.API
             app.UseHttpsRedirection();
 
             app.UseRouting();
+            app.UseCors();//cors
             app.UseAuthentication();//önemli bunuda ekledik. ayarlamalarýný yaptýðýmýz authentication kullan.
             app.UseAuthorization();
 

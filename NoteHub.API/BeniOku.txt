@@ -3,3 +3,6 @@ Install-Package Microsoft.EntityFrameworkCore.SqlServer
 Install-Package Microsoft.EntityFrameworkCore.Tools
 add-migration initial
 update-database
+
+
+https://docs.microsoft.com/en-us/aspnet/core/security/cors?view=aspnetcore-5.0 cors
