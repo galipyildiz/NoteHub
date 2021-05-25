@@ -65,5 +65,20 @@ namespace NoteHub.API.Controllers
 
             return BadRequest(ModelState);
         }
+        [HttpPost("Register")]
+        public async Task<IActionResult> Register(RegisterModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = new ApplicationUser()
+                {
+                    Email = model.Email,
+                    UserName = model.Email
+                };
+                await _userManager.CreateAsync(user, model.Password);
+                return Ok();
+            }
+            return BadRequest(ModelState);
+        }
     }
 }
