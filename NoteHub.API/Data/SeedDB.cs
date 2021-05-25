@@ -16,16 +16,23 @@ namespace NoteHub.API.Data
                 await roleManager.CreateAsync(new IdentityRole(Constants.Roles.ADMIN));
             }
 
-            if (!await userManager.Users.AnyAsync(x=>x.UserName == Constants.DEFAULT_EMAIL))
+            if (!await userManager.Users.AnyAsync(x => x.UserName == Constants.DEFAULT_EMAIL))
             {
                 var user = new ApplicationUser()
                 {
                     Email = Constants.DEFAULT_EMAIL,
-                    UserName = Constants.DEFAULT_EMAIL
+                    UserName = Constants.DEFAULT_EMAIL,
+                    Notes = new List<Note>()
+                    {
+                        new Note(){Title = "Sample Note 1", Content = "Lorem ipsum dolor sit amet, consectetur"},
+                        new Note(){Title = "Sample Note 2", Content = "Hava karabulutlu yine yağmur yağıyor."}
+                    }
                 };
                 await userManager.CreateAsync(user, Constants.DEFAULT_PASSWORD);
                 await userManager.AddToRoleAsync(user, Constants.Roles.ADMIN);
             }
+
+
         }
     }
 }

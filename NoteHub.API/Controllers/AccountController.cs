@@ -39,7 +39,8 @@ namespace NoteHub.API.Controllers
 
                 var authClaims = new List<Claim>()
                 {
-                    new Claim(JwtRegisteredClaimNames.Sub, user.UserName),
+                    new Claim(JwtRegisteredClaimNames.Sub, user.Id),//microsoft bunu otomatik claimtypeslardan nameidetifier olarak tanıyor.
+                    new Claim(ClaimTypes.Name, user.UserName),
                     new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
                 };
 
