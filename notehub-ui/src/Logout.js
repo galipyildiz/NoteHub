@@ -3,7 +3,7 @@ import { Redirect } from 'react-router'
 
 function Logout() {
     // TODO: tokeni sil
-    return <Redirect to="/login" />
+    return <Redirect to="/login?logout=success" />
 }
 
 export default Logout

@@ -77,6 +77,13 @@ https://marketplace.visualstudio.com/items?itemName=dsznajder.es7-react-js-snipp
 
 https://reactrouter.com/web/guides/quick-start
 
+https://www.npmjs.com/package/react-toastify
+
+https://reactjs.org/docs/context.html
+
+https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment
+
+
 ### vscode extensions
 ES7 React/Redux/GraphQL/React-Native snippets
 
