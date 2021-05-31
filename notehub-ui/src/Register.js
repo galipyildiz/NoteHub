@@ -1,8 +1,9 @@
 import './Register.css';
-import Card from 'react-bootstrap/Card'
+import Card from 'react-bootstrap/Card';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
-import Alert from 'react-bootstrap/Alert'
+import Alert from 'react-bootstrap/Alert';
+import { Link } from 'react-router-dom';
 
 function Register() {
     return (
@@ -16,10 +17,7 @@ function Register() {
                     <Form.Group controlId="formBasicEmail">
                         <Form.Label>Email address</Form.Label>
                         <Form.Control type="email" placeholder="Enter email" />
-                        <Form.Text className="text-muted">
-                            We'll never share your email with anyone else.
-    </Form.Text>
-                    </Form.Group>
+                        </Form.Group>
 
                     <Form.Group controlId="formBasicPassword">
                         <Form.Label>Password</Form.Label>
@@ -31,8 +29,11 @@ function Register() {
                     </Form.Group>
                     <Button variant="primary" type="submit">
                         Submit
-  </Button>
+                    </Button>
                 </Form>
+                <div className="text-center mt-3">
+                    <Link to="/login">Login with existing user</Link>
+                </div>
             </Card.Body>
         </Card>
     );

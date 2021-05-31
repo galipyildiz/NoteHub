@@ -1,6 +1,7 @@
 import './Home.css';
 import React from 'react';
 import { Col, Container, Row, Navbar, Nav, NavDropdown, ListGroup, Form, Button } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
 
 function Home() {
     return (
@@ -14,9 +15,7 @@ function Home() {
                     </Nav>
                     <Nav >
                         <NavDropdown alignRight title="My Account" id="basic-nav-dropdown">
-                            <NavDropdown.Item href="#action/3.1">
-                                Logout (admin@example.com)
-                            </NavDropdown.Item>
+                            <Link to="/logout" className="dropdown-item" > Logout (admin@example.com)</Link>
                         </NavDropdown>
                     </Nav>
                 </Navbar.Collapse>
@@ -50,7 +49,7 @@ function Home() {
                                 <Button variant="danger" className="ml-2">Sil</Button>
                             </div>
                         </Form>
-                </Col>
+                    </Col>
                 </Row>
             </Container>
         </div>
