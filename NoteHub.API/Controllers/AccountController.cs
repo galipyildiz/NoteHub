@@ -34,7 +34,8 @@ namespace NoteHub.API.Controllers
                 if (user == null || !await _userManager.CheckPasswordAsync(user, model.Password))
                 {
                     ModelState.AddModelError("", "Invalid username or password!");
-                    return BadRequest(ModelState);
+                // https://stackoverflow.com/questions/55289631/inconsistent-behaviour-with-modelstate-validation-asp-net-core-api
+                    return ValidationProblem(ModelState);//frontend de hatalar tek bir formatta gözüksük diye.
                 }
 
                 var authClaims = new List<Claim>()
@@ -64,7 +65,7 @@ namespace NoteHub.API.Controllers
             }
 
 
-            return BadRequest(ModelState);
+            return ValidationProblem(ModelState);
         }
         [HttpPost("Register")]
         public async Task<IActionResult> Register(RegisterModel model)
@@ -79,7 +80,7 @@ namespace NoteHub.API.Controllers
                 await _userManager.CreateAsync(user, model.Password);
                 return Ok();
             }
-            return BadRequest(ModelState);
+            return ValidationProblem(ModelState);
         }
     }
 }
