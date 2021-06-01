@@ -16,7 +16,8 @@ import Logout from './Logout'
 
 
 function App() {
-  const [isLoggedIn, setIsLoggedIn] = useState(true);  
+  // todo: local/session token varsa login et..
+  const [isLoggedIn, setIsLoggedIn] = useState(false);  
   const [token, setToken] = useState(null);//Destructuring assignment => [abc,edf]
   return (
     /* <h1>Merhaba Dünya!</h1>

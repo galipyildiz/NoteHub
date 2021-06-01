@@ -1,14 +1,17 @@
 import './Login.css';
+import AppContext from './AppContext'
 import { Card, Form, Button, Alert } from 'react-bootstrap';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useHistory } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useContext } from 'react' //en çok kullanılanlar
 import axios from 'axios'
 
 function Login() {
-    var query = new URLSearchParams(useLocation().search);
-    var qlogout = query.get("logout");//queryden değer okuma
+    const history = useHistory();//tarayıcı geçmişi gibi
+    const ctx = useContext(AppContext); // providerda tanımladıklarıma errişmek için.
+    const query = new URLSearchParams(useLocation().search);
+    const qlogout = query.get("logout");//queryden değer okuma
     useEffect(() => {
         //login bileşeni render/update olduğundan çalışacaklar
         //ajax istekleri burada yapılır.
@@ -20,24 +23,41 @@ function Login() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [rememberMe, setRememberMe] = useState(true);
+    const [errors, setErrors] = useState([]);
 
-    const handleSubmit = function(e){
+    const handleSubmit = function (e) {
+        setErrors([]);//her form gönderildiğinde hataları sıfırla
         e.preventDefault();
-        axios.post("https://localhost:5001/api/Account/Login",{
+        axios.post("https://localhost:5001/api/Account/Login", {
             username: email,
             password: password
         })
-        .then(function(response){
-            console.log(response);
-        })
-        .catch(function(error){
-            const data = error.response.data;
-            const messages = [];
-            for (const key in data){
-                messages.push(...data[key]);
-            }
-            console.log(messages.join(' '));
-        })
+            .then(function (response) {
+                if(rememberMe){//localstorage ve sessionstorage erişim js ile
+                    localStorage["username"] = email;
+                    localStorage["token"] = response.data.token;
+                    sessionStorage.removeItem("token");
+                    sessionStorage.removeItem("username");
+                }
+                else{
+                    sessionStorage["username"] = email;
+                    sessionStorage["token"] = response.data.token;
+                    localStorage.removeItem("token");
+                    localStorage.removeItem("username");
+                }
+                ctx.setToken(response.data.token);
+                ctx.setIsLoggedIn(true);
+                history.push("/");
+            })
+            .catch(function (error) {
+                if (error.response.data.errors) {//böyle bi prop varsa
+                    const messages = [];
+                    for (const key in error.response.data.errors) {
+                        messages.push(...error.response.data.errors[key]);
+                    }
+                    setErrors(messages);
+                }
+            })
     };
 
     return (
@@ -46,8 +66,8 @@ function Login() {
                 <ToastContainer />
                 <h1 className="text-center">Login</h1>
                 {/* {email} {password} {rememberMe ? "remember" : "dont remember"} */}
-                <Alert variant="danger">
-                    Invalid e-mail or password.
+                <Alert variant="danger" className={errors.length == 0 ? "d-none" : ""}>
+                    {errors.join(' ')}
                 </Alert>
                 <Form onSubmit={handleSubmit}>
                     <Form.Group controlId="formBasicEmail">
