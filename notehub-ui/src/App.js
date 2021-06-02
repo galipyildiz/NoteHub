@@ -16,15 +16,16 @@ import Logout from './Logout'
 
 
 function App() {
-  // todo: local/session token varsa login et..
-  const [isLoggedIn, setIsLoggedIn] = useState(false);  
-  const [token, setToken] = useState(null);//Destructuring assignment => [abc,edf]
+  const tokenString = sessionStorage["token"] || localStorage["token"] || null;
+  const [isLoggedIn, setIsLoggedIn] = useState(tokenString != null);  
+  const [token, setToken] = useState(tokenString);//Destructuring assignment => [abc,edf]
+  const [username, setUsername] = useState(sessionStorage["username"] || localStorage["username"] || null);
   return (
     /* <h1>Merhaba Dünya!</h1>
     <Button variant="primary" className="mr-4">Benim Butonum</Button>
     <Button variant="danger">Benim Butonum</Button>
     <button class="btn btn-success ml-4">Butonum</button> */
-    <AppContext.Provider value = {{ token, setToken, isLoggedIn, setIsLoggedIn}} >
+    <AppContext.Provider value = {{ token, setToken, isLoggedIn, setIsLoggedIn, username, setUsername}} >
       <Router>
         <Switch>
           <Route path="/register" >
