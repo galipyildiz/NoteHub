@@ -27,8 +27,9 @@ function App() {
     <Button variant="primary" className="mr-4">Benim Butonum</Button>
     <Button variant="danger">Benim Butonum</Button>
     <button class="btn btn-success ml-4">Butonum</button> */
+    /* eğer basename varsa yani sanaldizinde publish ediyorsak bunu vermeiliyiz routerda */
     <AppContext.Provider value = {{ token, setToken, isLoggedIn, setIsLoggedIn, username, setUsername}} >
-      <Router>
+      <Router>  
         <Switch>
           <Route path="/register" >
             <Register />
