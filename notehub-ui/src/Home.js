@@ -22,9 +22,41 @@ function Home() {
             });
     };
 
+    const addNewNote = function () {
+        axios.post(apiroot + "/api/Notes", { title: "New Note", content: "" }, { headers: { Authorization: "Bearer " + token } })
+            .then(function (response) {
+                const note = response.data;
+                setNotes([...notes, note]);//mevcut notların sonuna yeni gelen notu ekle
+            })
+    };
+
+    const saveNote = function () {
+        axios.put(apiroot + "/api/Notes/" + note.id, 
+        { id: note.id, title: note.title, content: note.content }, 
+        { headers: { Authorization: "Bearer " + token } })
+            .then(function (response) {
+                //loadNotes(); //basit yöntem
+                const newNotes = [...notes];
+                const selectedNote = newNotes.find((x) => x.id == note.id);
+                selectedNote.title = note.title;
+                selectedNote.content = note.content;
+                setNotes(newNotes); 
+            })
+    };
+
     const handleTitleClick = function (e, note) {
         e.preventDefault();
         setNote(note);
+    };
+
+    const handleNewNoteClick = function (e) {
+        e.preventDefault();
+        addNewNote();
+    };
+
+    const handleSaveClick = function (e) {
+        e.preventDefault();
+        saveNote();
     };
 
     useEffect(() => {
@@ -50,7 +82,12 @@ function Home() {
             <Container fluid className="flex-fill">
                 <Row className="h-100">
                     <Col sm={4} md={3}>
-                        <h3 className="mt-3">My Notes</h3>
+                        <h3 className="mt-3 d-flex">
+                            My Notes
+                            <Button variant="success" className="ml-auto" onClick={handleNewNoteClick} >
+                                <i className="fas fa-plus"></i>
+                            </Button>
+                        </h3>
                         <ListGroup>
                             {notes.map((note, index) =>
                                 <ListGroup.Item action href={"#notes-" + index} onClick={(e) => handleTitleClick(e, note)} key={note.id}>
@@ -62,14 +99,14 @@ function Home() {
                     <Col sm={8} md={9} className="h-100">
                         <Form className="py-3 h-100 d-flex flex-column">
                             <Form.Group>
-                                <Form.Control type="text" placeholder="Title" value={note.title} />
+                                <Form.Control type="text" placeholder="Title" value={note.title} onChange={(e) => setNote({ ...note, title: e.target.value })} />
                             </Form.Group>
                             <Form.Group className="flex-fill">
-                                <Form.Control as="textarea" rows={10} className="h-100" placeholder="Content" value={note.content} />
+                                <Form.Control as="textarea" rows={10} className="h-100" placeholder="Content" value={note.content} onChange={(e) => setNote({ ...note, content: e.target.value })} />
                             </Form.Group>
                             <div>
-                                <Button variant="primary">Kaydet</Button>
-                                <Button variant="danger" className="ml-2">Sil</Button>
+                                <Button variant="primary" onClick={handleSaveClick} >Save</Button>
+                                <Button variant="danger" className="ml-2" >Delete</Button>
                             </div>
                         </Form>
                     </Col>

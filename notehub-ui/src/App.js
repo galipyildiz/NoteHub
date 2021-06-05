@@ -7,12 +7,14 @@ import {
   Redirect
 } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
+import "@fortawesome/fontawesome-free/css/all.min.css"
 import './App.css';
 // import Button from 'react-bootstrap/Button'
 import Home from './Home';
 import Register from './Register';
 import Login from './Login'
 import Logout from './Logout'
+
 
 
 function App() {
