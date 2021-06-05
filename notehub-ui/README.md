@@ -93,3 +93,13 @@ ES7 React/Redux/GraphQL/React-Native snippets
 imp => import moduleName from 'module'
 
 rfce => React Function Component with Export
+
+### IIS PUT, DELETE CORS PROBLEM SOLUTION:
+```xml
+<system.webServer>
+    <modules runAllManagedModulesForAllRequests="false">
+        <remove name="WebDAVModule" />
+    </modules>
+    ...
+</system.webServer>
+``` 
