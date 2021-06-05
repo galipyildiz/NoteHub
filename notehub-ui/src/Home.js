@@ -10,7 +10,9 @@ function Home() {
     const apiroot = process.env.REACT_APP_API_ROOT;
     const token = ctx.token;
     const [notes, setNotes] = useState([]);
-    const [note, setNote] = useState({ id: 0, title: "", content: "", createdTime: "", modifiedTime: "" }); //açık olan notu temsil ediyor.
+    const emptyNote = { id: 0, title: "", content: "", createdTime: "", modifiedTime: "" };
+    const [note, setNote] = useState({...emptyNote}); //klonunu aldım
+   
 
     const loadNotes = function () {
         axios.get(apiroot + "/api/Notes", { headers: { Authorization: "Bearer " + token } })
@@ -31,17 +33,26 @@ function Home() {
     };
 
     const saveNote = function () {
-        axios.put(apiroot + "/api/Notes/" + note.id, 
-        { id: note.id, title: note.title, content: note.content }, 
-        { headers: { Authorization: "Bearer " + token } })
+        axios.put(apiroot + "/api/Notes/" + note.id,
+            { id: note.id, title: note.title, content: note.content },
+            { headers: { Authorization: "Bearer " + token } })
             .then(function (response) {
                 //loadNotes(); //basit yöntem
                 const newNotes = [...notes];
                 const selectedNote = newNotes.find((x) => x.id == note.id);
                 selectedNote.title = note.title;
                 selectedNote.content = note.content;
-                setNotes(newNotes); 
+                setNotes(newNotes);
             })
+    };
+
+    const deleteNote = function () {
+        axios.delete(apiroot + "/api/Notes/" + note.id, { headers: { Authorization: "Bearer " + token } })
+        .then(function (response){
+            const newNotes = notes.filter((x) => x.id != note.id);//yeni dizi döndü 
+            setNotes(newNotes);
+            setNote({...emptyNote});
+        })
     };
 
     const handleTitleClick = function (e, note) {
@@ -57,6 +68,11 @@ function Home() {
     const handleSaveClick = function (e) {
         e.preventDefault();
         saveNote();
+    };
+
+    const handleDeleteClick = function (e) {
+        e.preventDefault();
+        deleteNote();
     };
 
     useEffect(() => {
@@ -88,9 +104,9 @@ function Home() {
                                 <i className="fas fa-plus"></i>
                             </Button>
                         </h3>
-                        <ListGroup>
+                        <ListGroup activeKey={"#notes-" + note.id}>
                             {notes.map((note, index) =>
-                                <ListGroup.Item action href={"#notes-" + index} onClick={(e) => handleTitleClick(e, note)} key={note.id}>
+                                <ListGroup.Item action href={"#notes-" + note.id} onClick={(e) => handleTitleClick(e, note)} key={note.id} >
                                     {note.title}
                                 </ListGroup.Item>
                             )}
@@ -106,7 +122,7 @@ function Home() {
                             </Form.Group>
                             <div>
                                 <Button variant="primary" onClick={handleSaveClick} >Save</Button>
-                                <Button variant="danger" className="ml-2" >Delete</Button>
+                                <Button variant="danger" className="ml-2" onClick={handleDeleteClick} >Delete</Button>
                             </div>
                         </Form>
                     </Col>
